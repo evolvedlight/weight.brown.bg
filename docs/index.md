@@ -63,9 +63,9 @@ const weights = await FileAttachment("./data/weight.csv").csv({typed: true});
       x: {label: "Date"},
       y: {label: "Body mass (kg)"},
       marks: [
-        Plot.linearRegressionY(weights, {y: "weight", x: "date"}),
-        Plot.dot(weights, {y: "weight", x: "date", stroke: "weight", tip: true})
-      ]
+        Plot.dot(weights, {y: "weight", x: "date", stroke: "green", tip: true})
+      ],
+      y: {domain: [80, 88]}
     }))
   }</div>
 </div>
