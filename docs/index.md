@@ -51,20 +51,36 @@ toc: false
 </div>
 
 ```js
+function calculateRunningAverage(weights) {
+  const averages = [];
+  for (let i = 0; i < weights.length; i++) {
+    let sum = 0;
+    let count = 0;
+    for (let j = i; j >= Math.max(0, i - 4); j--) {
+      sum += weights[j].weight; // Add the weight property of the weight object
+      count++;
+    }
+    const averageWeight = sum / count;
+    const date = weights[i].date;
+    averages.push({ averageWeight, date });
+  }
+  return averages;
+}
 const weights = await FileAttachment("./data/weight.csv").csv({typed: true});
+const rollingWeight = calculateRunningAverage(weights);
 ```
 
 <div class="grid grid-cols-1" style="grid-auto-rows: 504px;">
   <div class="card">${
     resize((width) => Plot.plot({
-      title: "How big is Steve, anyway? 🐧",
+      title: "Weight and 5 day rolling average 🐧",
       width,
       grid: true,
       x: {label: "Date"},
       y: {label: "Body mass (kg)"},
       marks: [
-        Plot.linearRegressionY(weights, {y: "weight", x: "date"}),
-        Plot.dot(weights, {y: "weight", x: "date", stroke: "green", tip: true})
+        Plot.dot(weights, {y: "weight", x: "date", stroke: "green", tip: true}),
+        Plot.lineY(rollingWeight, {y: "averageWeight", x: "date", stroke: "lightgreen"})
       ],
       y: {domain: [80, 88]}
     }))
