@@ -86,3 +86,31 @@ const rollingWeight = calculateRunningAverage(weights);
     }))
   }</div>
 </div>
+
+```js
+const firstWeight = weights[0];
+const lastWeight = weights[weights.length - 1];
+const weightLoss = firstWeight.weight - lastWeight.weight;
+const daysTracking = (lastWeight.date - firstWeight.date) / (1000 * 60 * 60 * 24);
+const averagePerDay = weightLoss / daysTracking;
+const goal = 75;
+const daysUntilGoal = (lastWeight.weight - goal) / averagePerDay;
+```
+<div class="grid grid-cols-4">
+  <div class="card">
+    <h2>Start Weight</span></h2>
+    <span class="big">${firstWeight.weight}kg</span>
+  </div>
+  <div class="card">
+    <h2>Weight Loss so far</h2>
+    <span class="big">${weightLoss.toFixed(1)}kg</span>
+  </div>
+  <div class="card">
+    <h2>Average per day</h2>
+    <span class="big">${averagePerDay.toFixed(2)}kg</span>
+  </div>
+  <div class="card">
+    <h2>Days until goal</h2>
+    <span class="big">${daysUntilGoal.toFixed(0)}</span>
+  </div>
+</div>
