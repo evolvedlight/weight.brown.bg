@@ -90,27 +90,55 @@ const rollingWeight = calculateRunningAverage(weights);
 ```js
 const firstWeight = weights[0];
 const lastWeight = weights[weights.length - 1];
-const weightLoss = firstWeight.weight - lastWeight.weight;
 const daysTracking = (lastWeight.date - firstWeight.date) / (1000 * 60 * 60 * 24);
-const averagePerDay = weightLoss / daysTracking;
 const goal = 75;
-const daysUntilGoal = (lastWeight.weight - goal) / averagePerDay;
+
+// for the rolling average we just weight naively the last 5 rows
+var last5 = weights.slice(-5);
+var last5Ago = weights.slice(-10, -5);
+const currentWeightWeighted = calculateWeightedAverage(last5)
+const currentWeightWeightedAgo = calculateWeightedAverage(last5Ago)
+const weightLoss = firstWeight.weight - currentWeightWeighted;
+
+const trend = currentWeightWeightedAgo - currentWeightWeighted;
+const trendPerDay = trend / 5;
+const weightLossUntilGoal = currentWeightWeighted - goal;
+const daysUntilGoal = weightLossUntilGoal / trendPerDay;
+
+function calculateWeightedAverage(weights) {
+  const smoothingFactor = 2 / (weights.length + 1);
+  let ema = weights[0].weight; // Start with the first day's weight
+
+  for (let i = 1; i < weights.length; i++) {
+    ema = (weights[i].weight * smoothingFactor) + (ema * (1 - smoothingFactor));
+  }
+
+  return ema;
+}
 ```
-<div class="grid grid-cols-4">
+<div class="grid grid-cols-3">
   <div class="card">
     <h2>Start Weight</span></h2>
     <span class="big">${firstWeight.weight}kg</span>
+  </div>
+  <div class="card">
+    <h2>Goal Weight</span></h2>
+    <span class="big">${goal}kg</span>
   </div>
   <div class="card">
     <h2>Weight Loss so far</h2>
     <span class="big">${weightLoss.toFixed(1)}kg</span>
   </div>
   <div class="card">
-    <h2>Average per day</h2>
-    <span class="big">${averagePerDay.toFixed(2)}kg</span>
+    <h2>Average per day (rolling trend)</h2>
+    <span class="big">${trendPerDay.toFixed(2)}kg</span>
   </div>
   <div class="card">
     <h2>Days until goal</h2>
     <span class="big">${daysUntilGoal.toFixed(0)}</span>
+  </div>
+  <div class="card">
+    <h2>Weight loss until goal</h2>
+    <span class="big">${weightLossUntilGoal.toFixed(2)}kg</span>
   </div>
 </div>
