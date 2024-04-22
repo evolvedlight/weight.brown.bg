@@ -1,6 +1,6 @@
 # Weight Loss
 
-![image of front page](image.png)
+![image of front page](screenshot.png)
 
 ```
 npm i
