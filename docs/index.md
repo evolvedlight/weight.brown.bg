@@ -9,7 +9,7 @@ toc: false
   flex-direction: column;
   align-items: center;
   font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
+  margin: 2rem 0 4rem;
   text-wrap: balance;
   text-align: center;
 }
@@ -105,6 +105,10 @@ const trendPerDay = trend / 5;
 const weightLossUntilGoal = currentWeightWeighted - goal;
 const daysUntilGoal = weightLossUntilGoal / trendPerDay;
 
+const expectedGoalDate = new Date(lastWeight.date.getTime() + daysUntilGoal * 24 * 60 * 60 * 1000);
+
+const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
+
 function calculateWeightedAverage(weights) {
   const smoothingFactor = 2 / (weights.length + 1);
   let ema = weights[0].weight; // Start with the first day's weight
@@ -116,7 +120,7 @@ function calculateWeightedAverage(weights) {
   return ema;
 }
 ```
-<div class="grid grid-cols-3">
+<div class="grid grid-cols-4">
   <div class="card">
     <h2>Start Weight</span></h2>
     <span class="big">${firstWeight.weight}kg</span>
@@ -130,6 +134,10 @@ function calculateWeightedAverage(weights) {
     <span class="big">${weightLoss.toFixed(1)}kg</span>
   </div>
   <div class="card">
+    <h2>Weight loss until goal</h2>
+    <span class="big">${weightLossUntilGoal.toFixed(2)}kg</span>
+  </div>
+  <div class="card">
     <h2>Average per day (rolling trend)</h2>
     <span class="big">${trendPerDay.toFixed(2)}kg</span>
   </div>
@@ -138,7 +146,11 @@ function calculateWeightedAverage(weights) {
     <span class="big">${daysUntilGoal.toFixed(0)}</span>
   </div>
   <div class="card">
-    <h2>Weight loss until goal</h2>
-    <span class="big">${weightLossUntilGoal.toFixed(2)}kg</span>
+    <h2>Expected goal end date</h2>
+    <span class="big">${expectedGoalDate.toLocaleDateString('en-CH')}</span>
+  </div>
+  <div class="card">
+    <h2>% done</h2>
+    <span class="big">${percentageDone.toFixed(0)}%</span>
   </div>
 </div>
