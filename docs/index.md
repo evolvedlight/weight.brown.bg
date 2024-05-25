@@ -67,20 +67,51 @@ function calculateRunningAverage(weights) {
   return averages;
 }
 const weights = await FileAttachment("./data/weight.csv").csv({typed: true});
-const rollingWeight = calculateRunningAverage(weights);
-```
 
+const weightTable = [];
+// add all weights to weight table
+for (let i = 0; i < weights.length; i++) {
+  const yesterdayTrendNumber = weightTable[i - 1]?.trend ?? weights[0].weight;
+  
+  // this is the 10% exponential smoothed moving average from the hacker's diet
+  // Subtract yesterday's trend from today's weight. Write the result with a minus sign if it's negative.
+  const diffFromYesterday = weights[i].weight - yesterdayTrendNumber;
+
+  // Shift the decimal place in the resulting number one place to the left. Round the number to one decimal place by dropping the second decimal and increasing the first decimal by one if the second decimal place is 5 or greater.
+  const shifted = Math.round(diffFromYesterday) / 10;
+  const trend = yesterdayTrendNumber + shifted
+
+  weightTable.push({
+    date: weights[i].date,
+    weight: weights[i].weight,
+    diffFromYesterday: diffFromYesterday,
+    shifted: shifted,
+    trend: trend
+  });
+}
+```
 <div class="grid grid-cols-1" style="grid-auto-rows: 504px;">
   <div class="card">${
     resize((width) => Plot.plot({
-      title: "Weight and 5 day rolling average 🐧",
+      title: "Weight and moving average",
       width,
       grid: true,
       x: {label: "Date"},
       y: {label: "Body mass (kg)"},
+      color: {domain: [-1, 0, 1], range: ["#4daf4a", "currentColor", "#e41a1c"]},
       marks: [
-        Plot.dot(weights, {y: "weight", x: "date", stroke: "green", tip: true}),
-        Plot.lineY(rollingWeight, {y: "averageWeight", x: "date", stroke: "lightgreen"})
+        Plot.dot(weightTable, {y: "weight", x: "date", stroke: "green", tip: true}),
+        Plot.lineY(weightTable, {y: "trend", x: "date", stroke: "lightgreen"}),
+        Plot.ruleX(weightTable, {
+          x: "date",
+          y1: "weight",
+          y2: "trend",
+          stroke: (d) => Math.sign(d.weight - d.trend),
+          strokeWidth: 4,
+          strokeLinecap: "round"
+        }),
+        Plot.ruleY([81], {stroke: "yellow", strokeDasharray: "2,2"}),
+        // Plot.ruleY([75], {stroke: "lightgreen", strokeDasharray: "2,2"})
       ],
       y: {domain: [80, 88]}
     }))
@@ -88,37 +119,29 @@ const rollingWeight = calculateRunningAverage(weights);
 </div>
 
 ```js
-const firstWeight = weights[0];
+const firstWeight = weightTable[0];
 const lastWeight = weights[weights.length - 1];
+
 const daysTracking = (lastWeight.date - firstWeight.date) / (1000 * 60 * 60 * 24);
+const daysWithWeights = weightTable.length;
 const goal = 75;
 
-// for the rolling average we just weight naively the last 5 rows
-var last5 = weights.slice(-5);
-var last5Ago = weights.slice(-10, -5);
-const currentWeightWeighted = calculateWeightedAverage(last5)
-const currentWeightWeightedAgo = calculateWeightedAverage(last5Ago)
+const currentWeightWeighted = weightTable[weightTable.length - 1].trend;
+const currentWeightWeightedAgo = weightTable[weightTable.length - 11].trend
+
 const weightLoss = firstWeight.weight - currentWeightWeighted;
 
 const trend = currentWeightWeightedAgo - currentWeightWeighted;
-const trendPerDay = trend / 5;
+const trendPerDay = trend / 10;
+
+const trendOverall = (firstWeight.weight - currentWeightWeighted) / daysTracking;
+
 const weightLossUntilGoal = currentWeightWeighted - goal;
 const daysUntilGoal = weightLossUntilGoal / trendPerDay;
 
 const expectedGoalDate = new Date(lastWeight.date.getTime() + daysUntilGoal * 24 * 60 * 60 * 1000);
 
 const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
-
-function calculateWeightedAverage(weights) {
-  const smoothingFactor = 2 / (weights.length + 1);
-  let ema = weights[0].weight; // Start with the first day's weight
-
-  for (let i = 1; i < weights.length; i++) {
-    ema = (weights[i].weight * smoothingFactor) + (ema * (1 - smoothingFactor));
-  }
-
-  return ema;
-}
 ```
 <div class="grid grid-cols-4">
   <div class="card">
@@ -135,7 +158,7 @@ function calculateWeightedAverage(weights) {
   </div>
   <div class="card">
     <h2>Weight loss until goal</h2>
-    <span class="big">${weightLossUntilGoal.toFixed(2)}kg</span>
+    <span class="big">${weightLossUntilGoal.toFixed(1)}kg</span>
   </div>
   <div class="card">
     <h2>Average per day (rolling trend)</h2>
@@ -152,5 +175,17 @@ function calculateWeightedAverage(weights) {
   <div class="card">
     <h2>% done</h2>
     <span class="big">${percentageDone.toFixed(0)}%</span>
+  </div>
+  <div class="card">
+    <h2>Days tracking</h2>
+    <span class="big">${daysTracking}</span>
+  </div>
+  <div class="card">
+    <h2>Days weighed in</h2>
+    <span class="big">${daysWithWeights}</span>
+  </div>
+  <div class="card">
+    <h2>Average per day (overall)</h2>
+    <span class="big">${trendOverall.toFixed(2)}kg</span>
   </div>
 </div>
