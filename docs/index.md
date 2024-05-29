@@ -112,8 +112,8 @@ function evenRound(num, decimalPlaces) {
       y: {label: "Body mass (kg)"},
       color: {domain: [-1, 0, 1], range: ["#4daf4a", "currentColor", "#e41a1c"]},
       marks: [
-        Plot.dot(weightTable, {y: "weight", x: "date", stroke: "green", tip: true}),
-        Plot.lineY(weightTable, {y: "trend", x: "date", stroke: "lightgreen"}),
+        Plot.dot(weightTable, {y: "weight", x: "date", stroke: "green"}),
+        Plot.lineY(weightTable, {y: "trend", x: "date", stroke: "lightgreen", tip: true}),
         Plot.ruleX(weightTable, {
           x: "date",
           y1: "weight",
