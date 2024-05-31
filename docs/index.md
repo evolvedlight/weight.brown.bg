@@ -161,6 +161,10 @@ const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
     <span class="big">${firstWeight.weight}kg</span>
   </div>
   <div class="card">
+    <h2>Current Weight</span></h2>
+    <span class="big">${currentWeightWeighted.toFixed(1)}kg</span>
+  </div>
+  <div class="card">
     <h2>Goal Weight</span></h2>
     <span class="big">${goal}kg</span>
   </div>
