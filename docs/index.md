@@ -125,7 +125,7 @@ function evenRound(num, decimalPlaces) {
         Plot.ruleY([81], {stroke: "yellow", strokeDasharray: "2,2"}),
         // Plot.ruleY([75], {stroke: "lightgreen", strokeDasharray: "2,2"})
       ],
-      y: {domain: [80, 88]}
+      y: {domain: [78, 88]}
     }))
   }</div>
 </div>
@@ -136,7 +136,7 @@ const lastWeight = weights[weights.length - 1];
 
 const daysTracking = (lastWeight.date - firstWeight.date) / (1000 * 60 * 60 * 24);
 const daysWithWeights = weightTable.length;
-const goal = 75;
+const goal = 76;
 
 const currentWeightWeighted = weightTable[weightTable.length - 1].trend;
 const currentWeightWeightedAgo = weightTable[weightTable.length - 11].trend
