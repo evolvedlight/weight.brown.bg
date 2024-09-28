@@ -100,7 +100,48 @@ function evenRound(num, decimalPlaces) {
                 ((i % 2 == 0) ? i : i + 1) : Math.round(n);
     return d ? r / m : r;
 }
+
+const lastEntryDate = new Date(weightTable[weightTable.length - 1].date);
+
+const startDate = new Date(lastEntryDate);
+startDate.setDate(startDate.getDate() - 60);
+
+const weightTable60Days = weightTable.filter(entry => {
+    const entryDate = new Date(entry.date);
+    return entryDate >= startDate && entryDate < lastEntryDate;
+});
 ```
+
+```js
+
+```
+
+<div class="grid grid-cols-1" style="grid-auto-rows: 504px;">
+  <div class="card">${
+    resize((width) => Plot.plot({
+      title: "Weight and moving average (last 60 days)",
+      width,
+      grid: true,
+      x: {label: "Date"},
+      y: {label: "Body mass (kg)"},
+      color: {domain: [-1, 0, 1], range: ["#4daf4a", "currentColor", "#e41a1c"]},
+      marks: [
+        Plot.dot(weightTable60Days, {y: "weight", x: "date", stroke: "green"}),
+        Plot.lineY(weightTable60Days, {y: "trend", x: "date", stroke: "lightgreen", tip: true}),
+        Plot.ruleX(weightTable60Days, {
+          x: "date",
+          y1: "weight",
+          y2: "trend",
+          stroke: (d) => Math.sign(d.weight - d.trend),
+          strokeWidth: 4,
+          strokeLinecap: "round"
+        }),
+        Plot.ruleY([81], {stroke: "yellow", strokeDasharray: "2,2"}),
+      ],
+      y: {domain: [78, 88]}
+    }))
+  }</div>
+</div>
 
 <div class="grid grid-cols-1" style="grid-auto-rows: 504px;">
   <div class="card">${
