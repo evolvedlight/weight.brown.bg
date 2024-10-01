@@ -108,7 +108,7 @@ startDate.setDate(startDate.getDate() - 60);
 
 const weightTable60Days = weightTable.filter(entry => {
     const entryDate = new Date(entry.date);
-    return entryDate >= startDate && entryDate < lastEntryDate;
+    return entryDate >= startDate;
 });
 
 ```
