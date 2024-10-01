@@ -137,8 +137,11 @@ const weightTable60Days = weightTable.filter(entry => {
           strokeLinecap: "round"
         }),
         Plot.ruleY([81], {stroke: "yellow", strokeDasharray: "2,2"}),
+        Plot.ruleY([76], {stroke: "brown", strokeDasharray: "4,2"}),
+        Plot.ruleY([75], {stroke: "green", strokeDasharray: "4,2"}),
+        Plot.ruleY([74], {stroke: "brown", strokeDasharray: "4,2"}),
       ],
-      y: {domain: [78, 88]}
+      y: {domain: [73.5, 83]}
     }))
   }</div>
 </div>
@@ -164,9 +167,11 @@ const weightTable60Days = weightTable.filter(entry => {
           strokeLinecap: "round"
         }),
         Plot.ruleY([81], {stroke: "yellow", strokeDasharray: "2,2"}),
-        // Plot.ruleY([75], {stroke: "lightgreen", strokeDasharray: "2,2"})
+        Plot.ruleY([76], {stroke: "brown", strokeDasharray: "4,2"}),
+        Plot.ruleY([75], {stroke: "green", strokeDasharray: "4,2"}),
+        Plot.ruleY([74], {stroke: "brown", strokeDasharray: "4,2"}),
       ],
-      y: {domain: [78, 88]}
+      y: {domain: [73.5, 88]}
     }))
   }</div>
 </div>
