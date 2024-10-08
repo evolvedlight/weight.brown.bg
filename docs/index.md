@@ -104,16 +104,12 @@ function evenRound(num, decimalPlaces) {
 const lastEntryDate = new Date(weightTable[weightTable.length - 1].date);
 
 const startDate = new Date(lastEntryDate);
-startDate.setDate(startDate.getDate() - 60);
+startDate.setDate(startDate.getDate() - 40);
 
 const weightTable60Days = weightTable.filter(entry => {
     const entryDate = new Date(entry.date);
     return entryDate >= startDate;
 });
-```
-
-```js
-
 ```
 
 <div class="grid grid-cols-1" style="grid-auto-rows: 504px;">
