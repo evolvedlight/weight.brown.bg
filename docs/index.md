@@ -195,6 +195,12 @@ const daysUntilGoal = weightLossUntilGoal / trendPerDay;
 const expectedGoalDate = new Date(lastWeight.date.getTime() + daysUntilGoal * 24 * 60 * 60 * 1000);
 
 const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
+
+const goalNotReached = daysUntilGoal > 0;
+const weightLossUntilGoalString = goalNotReached ? weightLossUntilGoal.toFixed(1) + "kg" : "🎉";
+const daysUntilGoalString = goalNotReached ? daysUntilGoal.toFixed(0) : "🎉";
+
+const expectedEndDateString = goalNotReached ? expectedGoalDate.toLocaleDateString('en-CH') : "🎉";
 ```
 <div class="grid grid-cols-4">
   <div class="card">
@@ -215,7 +221,7 @@ const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
   </div>
   <div class="card">
     <h2>Weight loss until goal</h2>
-    <span class="big">${weightLossUntilGoal.toFixed(1)}kg</span>
+    <span class="big">${weightLossUntilGoalString}</span>
   </div>
   <div class="card">
     <h2>Average per day (rolling trend)</h2>
@@ -223,11 +229,11 @@ const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
   </div>
   <div class="card">
     <h2>Days until goal</h2>
-    <span class="big">${daysUntilGoal.toFixed(0)}</span>
+    <span class="big">${daysUntilGoalString}</span>
   </div>
   <div class="card">
     <h2>Expected goal end date</h2>
-    <span class="big">${expectedGoalDate.toLocaleDateString('en-CH')}</span>
+    <span class="big">${expectedEndDateString}</span>
   </div>
   <div class="card">
     <h2>% done</h2>
