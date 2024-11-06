@@ -137,7 +137,7 @@ const weightTable60Days = weightTable.filter(entry => {
         Plot.ruleY([75], {stroke: "green", strokeDasharray: "4,2"}),
         Plot.ruleY([74], {stroke: "brown", strokeDasharray: "4,2"}),
       ],
-      y: {domain: [73.5, 83]}
+      y: {domain: [73, 80]}
     }))
   }</div>
 </div>
