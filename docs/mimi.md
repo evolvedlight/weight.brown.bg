@@ -133,7 +133,7 @@ const weightTable60Days = weightTable.filter(entry => {
           strokeLinecap: "round"
         }),
       ],
-      y: {domain: [72, 76]}
+      y: {domain: [71, 76]}
     }))
   }</div>
 </div>
