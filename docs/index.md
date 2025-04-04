@@ -190,13 +190,14 @@ const trendPerDay = trend / 10;
 const trendOverall = (firstWeight.weight - currentWeightWeighted) / daysTracking;
 
 const weightLossUntilGoal = currentWeightWeighted - goal;
-const daysUntilGoal = weightLossUntilGoal / trendPerDay;
+const daysUntilGoal = trendPerDay > 0 ? weightLossUntilGoal / trendPerDay : weightLossUntilGoal / trendOverall;
 
 const expectedGoalDate = new Date(lastWeight.date.getTime() + daysUntilGoal * 24 * 60 * 60 * 1000);
 
 const percentageDone = weightLoss / (firstWeight.weight - goal) * 100;
 
 const goalNotReached = daysUntilGoal > 0;
+
 const weightLossUntilGoalString = goalNotReached ? weightLossUntilGoal.toFixed(1) + "kg" : "🎉";
 const daysUntilGoalString = goalNotReached ? daysUntilGoal.toFixed(0) : "🎉";
 
