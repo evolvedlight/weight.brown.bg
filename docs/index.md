@@ -177,7 +177,7 @@ const lastWeight = weights[weights.length - 1];
 
 const daysTracking = (lastWeight.date - firstWeight.date) / (1000 * 60 * 60 * 24);
 const daysWithWeights = weightTable.length;
-const goal = 76;
+const goal = 82;
 
 const currentWeightWeighted = weightTable[weightTable.length - 1].trend;
 const currentWeightWeightedAgo = weightTable[weightTable.length - 11].trend
@@ -213,7 +213,7 @@ const expectedEndDateString = goalNotReached ? expectedGoalDate.toLocaleDateStri
     <span class="big">${currentWeightWeighted.toFixed(1)}kg</span>
   </div>
   <div class="card">
-    <h2>Goal Weight</span></h2>
+    <h2>Next Goal Weight</span></h2>
     <span class="big">${goal}kg</span>
   </div>
   <div class="card">
